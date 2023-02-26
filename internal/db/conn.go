@@ -1,23 +1,19 @@
 package db
 
 import (
-	"github.com/RacoonMediaServer/rms-packages/pkg/configuration"
-	"gorm.io/driver/postgres"
+	"github.com/RacoonMediaServer/rms-notifier/internal/config"
+	"gorm.io/driver/sqlite"
 	"gorm.io/gorm"
 )
 
-// Database represents all database methods
-type Database interface {
-}
-
-type database struct {
+type Database struct {
 	conn *gorm.DB
 }
 
-func Connect(config configuration.Database) (Database, error) {
-	db, err := gorm.Open(postgres.Open(config.GetConnectionString()))
+func Connect(config config.Database) (*Database, error) {
+	db, err := gorm.Open(sqlite.Open(config.Path))
 	if err != nil {
 		return nil, err
 	}
-	return database{conn: db}, nil
+	return &Database{conn: db}, nil
 }

@@ -1,2 +1,3 @@
-# rms-template
-Template repository for microservices
+# rms-notifier
+
+Service for distributing notifications to users

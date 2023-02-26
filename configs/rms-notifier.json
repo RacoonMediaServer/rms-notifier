@@ -1,0 +1,12 @@
+{
+  "database": {
+    "path": "db.sqlite"
+  },
+  "device": "",
+  "remote": {
+    "scheme": "ws",
+    "host": "127.0.0.1",
+    "port": 8081,
+    "path": "bot"
+  }
+}
