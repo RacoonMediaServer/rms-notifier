@@ -1,7 +1,5 @@
 {
-  "database": {
-    "path": "db.sqlite"
-  },
+  "database": "mongodb://localhost:27017/notifier",
   "device": "",
   "remote": {
     "scheme": "ws",

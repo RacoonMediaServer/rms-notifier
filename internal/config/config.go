@@ -2,12 +2,6 @@ package config
 
 import "github.com/RacoonMediaServer/rms-packages/pkg/configuration"
 
-// Database is credentials to database access
-type Database struct {
-	// Path to SQLite database
-	Path string
-}
-
 // Remote is a settings for connection to rms-sender service
 type Remote struct {
 	Scheme string
@@ -18,7 +12,7 @@ type Remote struct {
 
 // Configuration represents entire service configuration
 type Configuration struct {
-	Database Database
+	Database string
 	Remote   Remote
 	Device   string
 }

@@ -1,0 +1,6 @@
+{{ define "notification.plain" }}
+{{ if ne $.Item "" }}<b>Название:</b> {{$.Item}}{{ end }}
+{{ if ne $.Channel "" }}<b>Камера:</b> {{$.Channel}}{{ end }}
+{{ if ne $.Time "" }}<b>Время:</b> {{$.Time}}{{ end }}
+{{ if ne $.Duration "" }}<b>Длительность:</b> {{$.Duration}}{{ end }}
+{{ end }}

@@ -1,0 +1,25 @@
+{{ define "alert.html" }}
+<html>
+
+<body>
+<h3>{{$.Title}}</h3>
+<table>
+    <tr>
+        <td><b>Время:</b></td>
+        <td>{{$.Time}}</td>
+    </tr>
+    <tr>
+        <td><b>Камера:</b></td>
+        <td>{{$.Channel}}</td>
+    </tr>
+    <tr>
+        <td><b>Код:</b></td>
+        <td>{{$.Kind}}</td>
+    </tr>
+</table>
+<br>
+<img src="cid:image_0"/>
+</body>
+
+</html>
+{{ end }}

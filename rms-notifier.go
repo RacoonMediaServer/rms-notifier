@@ -4,6 +4,8 @@ import (
 	"fmt"
 	"github.com/RacoonMediaServer/rms-notifier/internal/config"
 	"github.com/RacoonMediaServer/rms-notifier/internal/db"
+	"github.com/RacoonMediaServer/rms-notifier/internal/formatter"
+	"github.com/RacoonMediaServer/rms-notifier/internal/notifier"
 	notifierService "github.com/RacoonMediaServer/rms-notifier/internal/service"
 	rms_notifier "github.com/RacoonMediaServer/rms-packages/pkg/service/rms-notifier"
 	"github.com/RacoonMediaServer/rms-packages/pkg/service/servicemgr"
@@ -50,17 +52,18 @@ func main() {
 		_ = logger.Init(logger.WithLevel(logger.DebugLevel))
 	}
 
-	_, err := db.Connect(config.Config().Database)
+	database, err := db.Connect(config.Config().Database)
 	if err != nil {
 		logger.Fatalf("Connect to database failed: %s", err)
 	}
 
 	f := servicemgr.NewServiceFactory(service)
-	srv := notifierService.New(f)
+	n := notifier.New(f)
+	defer n.Stop()
 
-	// подписываемся на события
-	if err = srv.Subscribe(service.Server()); err != nil {
-		logger.Fatalf("Subscribe to events failed: %s", err)
+	srv := notifierService.New(f, database, &formatter.Formatter{}, n)
+	if err = srv.Initialize(service.Server()); err != nil {
+		logger.Fatalf("Initialize service failed: %s", err)
 	}
 
 	// регистрируем хендлеры

@@ -1,0 +1,33 @@
+{{ define "malfunction.html" }}
+<html>
+
+<body>
+<h3>{{$.Title}}</h3>
+<table>
+    <tr>
+        <td><b>Время:</b></td>
+        <td>{{$.Time}}</td>
+    </tr>
+    <tr>
+        <td><b>Ошибка:</b></td>
+        <td>{{$.Text}}</td>
+    </tr>
+    <tr>
+        <td><b>Код:</b></td>
+        <td>{{$.Code}}</td>
+    </tr>
+    <tr>
+        <td><b>Подсистема:</b></td>
+        <td>{{$.System}}</td>
+    </tr>
+    <tr>
+        <td><b>Отправитель:</b></td>
+        <td>{{$.Sender}}</td>
+    </tr>
+</table>
+<br>
+<pre><small>{{$.StackTrace}}</small></pre>
+</body>
+
+</html>
+{{ end }}
