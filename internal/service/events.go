@@ -45,7 +45,7 @@ func (s *Service) handleNotification(ctx context.Context, event events.Notificat
 		return nil
 	}
 
-	s.n.Notify(msg)
+	s.n.Notify(pubsub.NotificationTopic, msg)
 
 	return nil
 }
@@ -68,7 +68,7 @@ func (s *Service) handleMalfunction(ctx context.Context, event events.Malfunctio
 		logger.Errorf("Format event %+v failed: %s", &event, err)
 		return nil
 	}
-	s.n.Notify(msg)
+	s.n.Notify(pubsub.MalfunctionTopic, msg)
 
 	return nil
 }
@@ -91,7 +91,7 @@ func (s *Service) handleAlert(ctx context.Context, event events.Alert) error {
 		logger.Errorf("Format event %+v failed: %s", &event, err)
 		return nil
 	}
-	s.n.Notify(msg)
+	s.n.Notify(pubsub.AlertTopic, msg)
 
 	return nil
 }

@@ -6,6 +6,7 @@ import (
 	"github.com/RacoonMediaServer/rms-notifier/internal/db"
 	"github.com/RacoonMediaServer/rms-notifier/internal/formatter"
 	"github.com/RacoonMediaServer/rms-notifier/internal/notifier"
+	"github.com/RacoonMediaServer/rms-notifier/internal/sender"
 	notifierService "github.com/RacoonMediaServer/rms-notifier/internal/service"
 	rms_notifier "github.com/RacoonMediaServer/rms-packages/pkg/service/rms-notifier"
 	"github.com/RacoonMediaServer/rms-packages/pkg/service/servicemgr"
@@ -58,7 +59,7 @@ func main() {
 	}
 
 	f := servicemgr.NewServiceFactory(service)
-	n := notifier.New(f)
+	n := notifier.New(sender.NewFactory(f, config.Config().Remote))
 	defer n.Stop()
 
 	srv := notifierService.New(f, database, &formatter.Formatter{}, n)

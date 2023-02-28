@@ -19,5 +19,5 @@ type Formatter interface {
 
 type Notifier interface {
 	SetSettings(settings notifier.Settings)
-	Notify(message *formatter.Message)
+	Notify(topic string, message *formatter.Message)
 }

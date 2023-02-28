@@ -5,6 +5,11 @@ import (
 	"go-micro.dev/v4/logger"
 )
 
+type notify struct {
+	topic string
+	msg   *formatter.Message
+}
+
 func (n *Notifier) process() {
 	for {
 		select {
@@ -20,7 +25,7 @@ func (n *Notifier) processCommand(cmd interface{}) {
 	switch content := cmd.(type) {
 	case *Settings:
 		n.setSettings(content)
-	case *formatter.Message:
+	case *notify:
 		n.notify(content)
 	default:
 		logger.Errorf("Unknown command type: %T", content)

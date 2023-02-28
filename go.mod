@@ -3,7 +3,7 @@ module github.com/RacoonMediaServer/rms-notifier
 go 1.20
 
 require (
-	github.com/RacoonMediaServer/rms-packages v1.7.2
+	github.com/RacoonMediaServer/rms-packages v1.7.4
 	github.com/urfave/cli/v2 v2.3.0
 	go-micro.dev/v4 v4.9.0
 	go.mongodb.org/mongo-driver v1.11.2

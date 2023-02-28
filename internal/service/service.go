@@ -69,8 +69,7 @@ func (s *Service) applySettings(settings *rms_notifier.Settings) {
 	s.settings = settings
 	s.enabled.Store(settings.Enabled)
 	s.n.SetSettings(notifier.Settings{
-		TelegramEnabled: s.settings.TelegramNotifications,
-		Rules:           s.settings.Rules,
+		Rules: s.settings.Rules,
 	})
 }
 
