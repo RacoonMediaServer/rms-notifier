@@ -54,6 +54,9 @@ func (f Formatter) formatNotification(sender string, e *events.Notification) *Me
 	case events.Notification_TranscodingFailed:
 		m.Severity = Fault
 		m.Subject = "Транскодирование завершено с ошибкой"
+	case events.Notification_TorrentRemoved:
+		// системное уведомление, так что не отправляем
+		return nil
 	default:
 		logger.Errorf("Unknown notification code: %s", e.Kind)
 		m.Subject = "Уведомление"
@@ -63,6 +66,10 @@ func (f Formatter) formatNotification(sender string, e *events.Notification) *Me
 		Title:  m.Subject,
 		Sender: sender,
 		Kind:   e.Kind.String(),
+	}
+
+	if e.ItemTitle != nil {
+		ctx.Item = *e.ItemTitle
 	}
 
 	// TODO: обработка истории с транскодированием видео
