@@ -43,8 +43,10 @@ func (s *Service) Initialize(server server.Server) error {
 func (s *Service) GetSettings(ctx context.Context, empty *emptypb.Empty, settings *rms_notifier.Settings) error {
 	s.mu.Lock()
 	defer s.mu.Unlock()
-
-	settings = s.settings
+	settings.Enabled = s.settings.Enabled
+	settings.Rules = s.settings.Rules
+	settings.FilterInterval = s.settings.FilterInterval
+	settings.RotationInterval = s.settings.RotationInterval
 	return nil
 }
 
@@ -63,6 +65,7 @@ func (s *Service) GetJournalEvents(ctx context.Context, request *rms_notifier.Ge
 }
 
 func (s *Service) applySettings(settings *rms_notifier.Settings) {
+	logger.Infof("Settings: %+v", settings)
 	s.mu.Lock()
 	defer s.mu.Unlock()
 
