@@ -4,6 +4,10 @@
 <body>
 <h3>{{$.Title}}</h3>
 <table>
+    <tr>
+        <td><b>Отправитель:</b></td>
+        <td>{{$.Sender}}</td>
+    </tr>
     {{ if ne $.Item "" }}
     <tr>
         <td><b>Название:</b></td>

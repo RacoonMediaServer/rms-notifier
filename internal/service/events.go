@@ -44,6 +44,7 @@ func (s *Service) handleNotification(ctx context.Context, event events.Notificat
 		logger.Errorf("Format event %+v failed: %s", &event, err)
 		return nil
 	}
+	logger.Info(msg.BodyPlain)
 
 	if msg != nil {
 		s.n.Notify(pubsub.NotificationTopic, msg)

@@ -26,6 +26,17 @@ func init() {
 type Formatter struct {
 }
 
+func prettySender(sender string) string {
+	switch sender {
+	case "rms-torrent":
+		return "Торрент-клиент"
+	case "rms-cctv":
+		return "Система видеонаблюдения"
+	default:
+		return sender
+	}
+}
+
 func (f Formatter) Format(sender string, event interface{}) (*Message, error) {
 	switch e := event.(type) {
 	case *events.Notification:
@@ -64,7 +75,7 @@ func (f Formatter) formatNotification(sender string, e *events.Notification) *Me
 
 	ctx := uiContext{
 		Title:  m.Subject,
-		Sender: sender,
+		Sender: prettySender(sender),
 		Kind:   e.Kind.String(),
 	}
 
@@ -148,7 +159,7 @@ func (f Formatter) formatAlert(sender string, e *events.Alert) *Message {
 	ctx := uiContext{
 		Title:   m.Subject,
 		Time:    ts.Format(time.RFC3339),
-		Sender:  sender,
+		Sender:  prettySender(sender),
 		Kind:    e.Kind.String(),
 		Channel: e.Camera,
 	}
