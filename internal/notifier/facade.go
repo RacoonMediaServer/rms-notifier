@@ -26,7 +26,7 @@ type Notifier struct {
 
 // Settings are configuration of all notifications
 type Settings struct {
-	Rules map[string]*rms_notifier.Settings_Rules
+	Rules map[string]*rms_notifier.NotifierSettings_Rules
 }
 
 func New(f sender.Factory) *Notifier {

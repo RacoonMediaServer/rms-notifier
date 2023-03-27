@@ -10,7 +10,7 @@ import (
 	"go.mongodb.org/mongo-driver/mongo/options"
 )
 
-func (d Database) LoadSettings(ctx context.Context) (*rms_notifier.Settings, error) {
+func (d Database) LoadSettings(ctx context.Context) (*rms_notifier.NotifierSettings, error) {
 	ctx, cancel := context.WithTimeout(ctx, databaseTimeout)
 	defer cancel()
 
@@ -22,11 +22,11 @@ func (d Database) LoadSettings(ctx context.Context) (*rms_notifier.Settings, err
 		return nil, found.Err()
 	}
 
-	var result rms_notifier.Settings
+	var result rms_notifier.NotifierSettings
 	return &result, found.Decode(&result)
 }
 
-func (d Database) SaveSettings(ctx context.Context, settings *rms_notifier.Settings) error {
+func (d Database) SaveSettings(ctx context.Context, settings *rms_notifier.NotifierSettings) error {
 	ctx, cancel := context.WithTimeout(ctx, databaseTimeout)
 	defer cancel()
 

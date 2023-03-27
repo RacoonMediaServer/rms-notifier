@@ -11,6 +11,7 @@ import (
 	"google.golang.org/protobuf/types/known/emptypb"
 	"sync"
 	"sync/atomic"
+	"time"
 )
 
 type Service struct {
@@ -22,7 +23,7 @@ type Service struct {
 	enabled atomic.Bool
 
 	mu       sync.Mutex
-	settings *rms_notifier.Settings
+	settings *rms_notifier.NotifierSettings
 }
 
 func (s *Service) Initialize(server server.Server) error {
@@ -40,7 +41,7 @@ func (s *Service) Initialize(server server.Server) error {
 	return nil
 }
 
-func (s *Service) GetSettings(ctx context.Context, empty *emptypb.Empty, settings *rms_notifier.Settings) error {
+func (s *Service) GetSettings(ctx context.Context, empty *emptypb.Empty, settings *rms_notifier.NotifierSettings) error {
 	s.mu.Lock()
 	defer s.mu.Unlock()
 	settings.Enabled = s.settings.Enabled
@@ -50,7 +51,7 @@ func (s *Service) GetSettings(ctx context.Context, empty *emptypb.Empty, setting
 	return nil
 }
 
-func (s *Service) SetSettings(ctx context.Context, settings *rms_notifier.Settings, empty *emptypb.Empty) error {
+func (s *Service) SetSettings(ctx context.Context, settings *rms_notifier.NotifierSettings, empty *emptypb.Empty) error {
 	if err := s.db.SaveSettings(ctx, settings); err != nil {
 		logger.Errorf("Save settings failed: %s", err)
 		return err
@@ -59,12 +60,35 @@ func (s *Service) SetSettings(ctx context.Context, settings *rms_notifier.Settin
 	return nil
 }
 
-func (s *Service) GetJournalEvents(ctx context.Context, request *rms_notifier.GetEventsRequest, response *rms_notifier.GetEventsResponse) error {
-	//TODO implement me
-	panic("implement me")
+func (s *Service) GetJournal(ctx context.Context, request *rms_notifier.GetJournalRequest, response *rms_notifier.GetJournalResponse) error {
+	var from, to *time.Time
+	if request.From != nil {
+		from = new(time.Time)
+		*from = time.Unix(*request.From, 0)
+	}
+	if request.To != nil {
+		to = new(time.Time)
+		*to = time.Unix(*request.To, 0)
+	}
+	evs, err := s.db.LoadEvents(ctx, from, to, uint(request.Limit))
+	if err != nil {
+		return err
+	}
+
+	response.Events = make([]*rms_notifier.Event, 0, len(evs))
+	for _, e := range evs {
+		response.Events = append(response.Events, &rms_notifier.Event{
+			Notification: e.Notification,
+			Malfunction:  e.Malfunction,
+			Alert:        e.Alert,
+			Sender:       e.Sender,
+			Timestamp:    e.Timestamp.Unix(),
+		})
+	}
+	return nil
 }
 
-func (s *Service) applySettings(settings *rms_notifier.Settings) {
+func (s *Service) applySettings(settings *rms_notifier.NotifierSettings) {
 	logger.Infof("Settings: %+v", settings)
 	s.mu.Lock()
 	defer s.mu.Unlock()

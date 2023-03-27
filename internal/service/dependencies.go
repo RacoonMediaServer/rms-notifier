@@ -2,15 +2,18 @@ package service
 
 import (
 	"context"
+	"github.com/RacoonMediaServer/rms-notifier/internal/db"
 	"github.com/RacoonMediaServer/rms-notifier/internal/formatter"
 	"github.com/RacoonMediaServer/rms-notifier/internal/notifier"
 	rms_notifier "github.com/RacoonMediaServer/rms-packages/pkg/service/rms-notifier"
+	"time"
 )
 
 type Database interface {
-	LoadSettings(ctx context.Context) (*rms_notifier.Settings, error)
-	SaveSettings(ctx context.Context, settings *rms_notifier.Settings) error
+	LoadSettings(ctx context.Context) (*rms_notifier.NotifierSettings, error)
+	SaveSettings(ctx context.Context, settings *rms_notifier.NotifierSettings) error
 	StoreEvent(ctx context.Context, sender string, e interface{}) error
+	LoadEvents(ctx context.Context, from, to *time.Time, limit uint) ([]*db.Event, error)
 }
 
 type Formatter interface {

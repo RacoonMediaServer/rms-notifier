@@ -6,9 +6,9 @@ import (
 )
 
 // DefaultSettings is default service settings values
-var DefaultSettings = rms_notifier.Settings{
+var DefaultSettings = rms_notifier.NotifierSettings{
 	Enabled: true,
-	Rules: map[string]*rms_notifier.Settings_Rules{
+	Rules: map[string]*rms_notifier.NotifierSettings_Rules{
 		pubsub.NotificationTopic: {
 			Rule: []*rms_notifier.Rule{
 				{

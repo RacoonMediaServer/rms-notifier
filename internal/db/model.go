@@ -1,12 +1,26 @@
 package db
 
 import (
-	rms_notifier "github.com/RacoonMediaServer/rms-packages/pkg/service/rms-notifier"
+	"github.com/RacoonMediaServer/rms-packages/pkg/events"
 	"time"
 )
 
-type event struct {
-	rms_notifier.Event
-	Sender    string
-	Timestamp time.Time
+type Event struct {
+	Notification *events.Notification
+	Malfunction  *events.Malfunction
+	Alert        *events.Alert
+	Sender       string
+	Timestamp    time.Time
+}
+
+func (e Event) Unpack() interface{} {
+	if e.Notification != nil {
+		return e.Notification
+	} else if e.Malfunction != nil {
+		return e.Malfunction
+	} else if e.Alert != nil {
+		return e.Alert
+	}
+
+	return nil
 }
