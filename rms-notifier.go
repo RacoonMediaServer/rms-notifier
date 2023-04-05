@@ -59,7 +59,7 @@ func main() {
 	}
 
 	f := servicemgr.NewServiceFactory(service)
-	n := notifier.New(sender.NewFactory(f, config.Config().Remote))
+	n := notifier.New(sender.NewFactory(f, config.Config().Remote, config.Config().Device))
 	defer n.Stop()
 
 	srv := notifierService.New(f, database, &formatter.Formatter{}, n)

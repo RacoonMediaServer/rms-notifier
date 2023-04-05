@@ -2,9 +2,9 @@
   "database": "mongodb://localhost:27017/notifier",
   "device": "",
   "remote": {
-    "scheme": "ws",
+    "scheme": "http",
     "host": "127.0.0.1",
-    "port": 8081,
-    "path": "bot"
+    "port": 8080,
+    "path": ""
   }
 }

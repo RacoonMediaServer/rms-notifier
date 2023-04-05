@@ -14,20 +14,26 @@ type Factory interface {
 type factory struct {
 	f      servicemgr.ServiceFactory
 	remote config.Remote
+	device string
 }
 
 func (f factory) New(method rms_notifier.Rule_Method, destination string) Sender {
 	switch method {
 	case rms_notifier.Rule_Telegram:
 		return newTelegramSender(f.f)
+	case rms_notifier.Rule_Email:
+		return newEmailSender(f.remote, f.device, destination)
+	case rms_notifier.Rule_SMS:
+		return newSmsSender(f.remote, f.device, destination)
 	default:
 		panic("unknown notification method")
 	}
 }
 
-func NewFactory(f servicemgr.ServiceFactory, remote config.Remote) Factory {
+func NewFactory(f servicemgr.ServiceFactory, remote config.Remote, device string) Factory {
 	return &factory{
 		f:      f,
 		remote: remote,
+		device: device,
 	}
 }
