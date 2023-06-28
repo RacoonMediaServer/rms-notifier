@@ -33,13 +33,12 @@ func (s *Service) handleNotification(ctx context.Context, event events.Notificat
 
 	md, _ := metadata.FromContext(ctx)
 	logger.Debugf("Received notification %+v with metadata %+v\n", event, md)
-	sender := md["Micro-From-Service"]
 
-	if err := s.db.StoreEvent(ctx, sender, &event); err != nil {
+	if err := s.db.StoreEvent(ctx, &event); err != nil {
 		logger.Warnf("Store notification event failed: %s", err)
 	}
 
-	msg, err := s.formatter.Format(sender, &event)
+	msg, err := s.formatter.Format(&event)
 	if err != nil {
 		logger.Errorf("Format event %+v failed: %s", &event, err)
 		return nil
@@ -60,13 +59,12 @@ func (s *Service) handleMalfunction(ctx context.Context, event events.Malfunctio
 
 	md, _ := metadata.FromContext(ctx)
 	logger.Debugf("Received malfunction %+v with metadata %+v\n", event, md)
-	sender := md["Micro-From-Service"]
 
-	if err := s.db.StoreEvent(ctx, sender, &event); err != nil {
+	if err := s.db.StoreEvent(ctx, &event); err != nil {
 		logger.Warnf("Store malfunction event failed: %s", err)
 	}
 
-	msg, err := s.formatter.Format(sender, &event)
+	msg, err := s.formatter.Format(&event)
 	if err != nil {
 		logger.Errorf("Format event %+v failed: %s", &event, err)
 		return nil
@@ -85,13 +83,12 @@ func (s *Service) handleAlert(ctx context.Context, event events.Alert) error {
 
 	md, _ := metadata.FromContext(ctx)
 	logger.Debugf("Received alert %s from camera %s with metadata %+v\n", event.Kind, event.Camera, md)
-	sender := md["Micro-From-Service"]
 
-	if err := s.db.StoreEvent(ctx, sender, &event); err != nil {
+	if err := s.db.StoreEvent(ctx, &event); err != nil {
 		logger.Warnf("Store alert event failed: %s", err)
 	}
 
-	msg, err := s.formatter.Format(sender, &event)
+	msg, err := s.formatter.Format(&event)
 	if err != nil {
 		logger.Errorf("Format event %+v failed: %s", &event, err)
 		return nil

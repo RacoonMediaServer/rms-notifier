@@ -81,7 +81,6 @@ func (s *Service) GetJournal(ctx context.Context, request *rms_notifier.GetJourn
 			Notification: e.Notification,
 			Malfunction:  e.Malfunction,
 			Alert:        e.Alert,
-			Sender:       e.Sender,
 			Timestamp:    e.Timestamp.Unix(),
 		})
 	}

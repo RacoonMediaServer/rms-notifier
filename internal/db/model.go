@@ -9,7 +9,6 @@ type Event struct {
 	Notification *events.Notification
 	Malfunction  *events.Malfunction
 	Alert        *events.Alert
-	Sender       string
 	Timestamp    time.Time
 }
 

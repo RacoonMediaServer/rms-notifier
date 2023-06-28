@@ -12,12 +12,12 @@ import (
 type Database interface {
 	LoadSettings(ctx context.Context) (*rms_notifier.NotifierSettings, error)
 	SaveSettings(ctx context.Context, settings *rms_notifier.NotifierSettings) error
-	StoreEvent(ctx context.Context, sender string, e interface{}) error
+	StoreEvent(ctx context.Context, e interface{}) error
 	LoadEvents(ctx context.Context, from, to *time.Time, limit uint) ([]*db.Event, error)
 }
 
 type Formatter interface {
-	Format(sender string, event interface{}) (*formatter.Message, error)
+	Format(event interface{}) (*formatter.Message, error)
 }
 
 type Notifier interface {

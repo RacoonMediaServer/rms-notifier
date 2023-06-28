@@ -30,27 +30,37 @@ func prettySender(sender string) string {
 	switch sender {
 	case "rms-torrent":
 		return "Торрент-клиент"
+	case "rms-notes":
+		return "Сервис заметок"
 	case "rms-cctv":
 		return "Система видеонаблюдения"
+	case "rms-bot-client":
+		return "Telegram-бот"
+	case "rms-library":
+		return "Библиотека мультимедия"
+	case "rms-web":
+		return "Веб-интерфейс"
+	case "rms-transcoder":
+		return "Транскодер"
 	default:
 		return sender
 	}
 }
 
-func (f Formatter) Format(sender string, event interface{}) (*Message, error) {
+func (f Formatter) Format(event interface{}) (*Message, error) {
 	switch e := event.(type) {
 	case *events.Notification:
-		return f.formatNotification(sender, e), nil
+		return f.formatNotification(e), nil
 	case *events.Malfunction:
-		return f.formatMalfunction(sender, e), nil
+		return f.formatMalfunction(e), nil
 	case *events.Alert:
-		return f.formatAlert(sender, e), nil
+		return f.formatAlert(e), nil
 	default:
 		return nil, fmt.Errorf("unknown event type: %T", e)
 	}
 }
 
-func (f Formatter) formatNotification(sender string, e *events.Notification) *Message {
+func (f Formatter) formatNotification(e *events.Notification) *Message {
 	m := &Message{}
 	switch e.Kind {
 	case events.Notification_DownloadComplete:
@@ -75,7 +85,7 @@ func (f Formatter) formatNotification(sender string, e *events.Notification) *Me
 
 	ctx := uiContext{
 		Title:  m.Subject,
-		Sender: prettySender(sender),
+		Sender: prettySender(e.Sender),
 		Kind:   e.Kind.String(),
 	}
 
@@ -100,7 +110,7 @@ func (f Formatter) formatNotification(sender string, e *events.Notification) *Me
 	return m
 }
 
-func (f Formatter) formatMalfunction(sender string, e *events.Malfunction) *Message {
+func (f Formatter) formatMalfunction(e *events.Malfunction) *Message {
 	m := &Message{
 		Severity: Fault,
 		Subject:  fmt.Sprintf("RMS. Сбой в системе %s: %s", e.System, e.Code),
@@ -110,7 +120,7 @@ func (f Formatter) formatMalfunction(sender string, e *events.Malfunction) *Mess
 		Title:      m.Subject,
 		Time:       time.Unix(e.Timestamp, 0).Local().Format(time.RFC3339),
 		Text:       e.Error,
-		Sender:     sender,
+		Sender:     e.Sender,
 		Code:       e.Code.String(),
 		System:     e.System.String(),
 		StackTrace: e.StackTrace,
@@ -131,7 +141,7 @@ func (f Formatter) formatMalfunction(sender string, e *events.Malfunction) *Mess
 	return m
 }
 
-func (f Formatter) formatAlert(sender string, e *events.Alert) *Message {
+func (f Formatter) formatAlert(e *events.Alert) *Message {
 	m := &Message{}
 
 	m.Severity = Warning
@@ -159,7 +169,7 @@ func (f Formatter) formatAlert(sender string, e *events.Alert) *Message {
 	ctx := uiContext{
 		Title:   m.Subject,
 		Time:    ts.Format(time.RFC3339),
-		Sender:  prettySender(sender),
+		Sender:  prettySender(e.Sender),
 		Kind:    e.Kind.String(),
 		Channel: e.Camera,
 	}

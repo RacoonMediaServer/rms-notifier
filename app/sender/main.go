@@ -83,8 +83,7 @@ func main() {
 		}
 	}
 
-	pub := micro.NewEvent(topic, service.Client())
-
+	pub := pubsub.NewPublisher(service)
 	var pkg interface{}
 
 	switch topic {

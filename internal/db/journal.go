@@ -9,8 +9,8 @@ import (
 	"time"
 )
 
-func (d Database) StoreEvent(ctx context.Context, sender string, e interface{}) error {
-	record := Event{Sender: sender}
+func (d Database) StoreEvent(ctx context.Context, e interface{}) error {
+	record := Event{}
 	switch e := e.(type) {
 	case *events.Notification:
 		record.Notification = e
