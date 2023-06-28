@@ -93,6 +93,7 @@ func (s *Service) handleAlert(ctx context.Context, event events.Alert) error {
 		logger.Errorf("Format event %+v failed: %s", &event, err)
 		return nil
 	}
+	logger.Debugf("Formatted: %s", msg.BodyHtml)
 
 	if msg != nil {
 		s.n.Notify(pubsub.AlertTopic, msg)

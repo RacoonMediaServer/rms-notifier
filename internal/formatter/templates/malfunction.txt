@@ -1,8 +1,7 @@
-{{ define "malfunction.plain" }}
-<b>Время:</b> {{$.Time}}
+{{ define "malfunction.plain" }}<b>Время:</b> {{$.Time}}
 <b>Ошибка:</b> {{$.Text}}
 <b>Код:</b> {{$.Code}}
 <b>Подсистема:</b> {{$.System}}
 <b>Отправитель:</b> {{$.Sender}}
-<pre><code>{{$.StackTrace}}</code></pre>
-{{ end }}
+
+<pre><code>{{$.StackTrace}}</code></pre>{{ end }}

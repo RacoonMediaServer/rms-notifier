@@ -1,5 +1,3 @@
-{{ define "alert.plain" }}
-<b>Время:</b> {{$.Time}}
+{{ define "alert.plain" }}<b>Время:</b> {{$.Time}}
 <b>Камера:</b> {{$.Channel}}
-<b>Код:</b> {{$.Kind}}
-{{ end }}
+<b>Код:</b> {{$.Kind}}{{ end }}

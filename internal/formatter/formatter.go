@@ -186,10 +186,12 @@ func (f Formatter) formatAlert(e *events.Alert) *Message {
 	}
 	m.BodyPlain = buf.String()
 
-	m.Attachment = &communication.Attachment{
-		Type:     communication.Attachment_Photo,
-		MimeType: e.ImageMimeType,
-		Content:  e.Image,
+	if len(e.Image) != 0 {
+		m.Attachment = &communication.Attachment{
+			Type:     communication.Attachment_Photo,
+			MimeType: e.ImageMimeType,
+			Content:  e.Image,
+		}
 	}
 
 	// TODO: а как в уведомлении задать кнопку выгрузки архива для tg ?
