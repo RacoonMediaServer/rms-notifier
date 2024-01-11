@@ -42,6 +42,8 @@ func prettySender(sender string) string {
 		return "Веб-интерфейс"
 	case "rms-transcoder":
 		return "Транскодер"
+	case "rms-backup":
+		return "Сервис резервного копирования"
 	default:
 		return sender
 	}
@@ -75,6 +77,9 @@ func (f Formatter) formatNotification(e *events.Notification) *Message {
 	case events.Notification_TranscodingFailed:
 		m.Severity = Fault
 		m.Subject = "Транскодирование завершено с ошибкой"
+	case events.Notification_BackupComplete:
+		m.Severity = Info
+		m.Subject = "Резервное копирование завершено"
 	case events.Notification_TorrentRemoved:
 		// системное уведомление, так что не отправляем
 		return nil
