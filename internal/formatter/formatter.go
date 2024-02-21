@@ -98,8 +98,6 @@ func (f Formatter) formatNotification(e *events.Notification) *Message {
 		ctx.Item = *e.ItemTitle
 	}
 
-	// TODO: обработка истории с транскодированием видео
-
 	var buf bytes.Buffer
 	if err := htmlTemplates.ExecuteTemplate(&buf, "notification.html", ctx); err != nil {
 		logger.Errorf("Format notification event failed: %s", err)
@@ -199,6 +197,11 @@ func (f Formatter) formatAlert(e *events.Alert) *Message {
 		}
 	}
 
-	// TODO: а как в уведомлении задать кнопку выгрузки архива для tg ?
+	m.Buttons = []*communication.Button{
+		{
+			Title:   "Выгрузить архив",
+			Command: fmt.Sprintf("/archive %s %s", e.Camera, ts.Format("2006-01-02 15:04:05")),
+		},
+	}
 	return m
 }

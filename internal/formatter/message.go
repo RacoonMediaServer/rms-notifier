@@ -17,4 +17,5 @@ type Message struct {
 	BodyHtml   string
 	BodyPlain  string
 	Attachment *communication.Attachment
+	Buttons    []*communication.Button
 }

@@ -17,6 +17,8 @@ func (t telegramSender) Send(ctx context.Context, message *formatter.Message) er
 	msg := communication.BotMessage{}
 	msg.Text = fmt.Sprintf("<b>%s</b>\n\n%s", message.Subject, message.BodyPlain)
 	msg.Attachment = message.Attachment
+	msg.Buttons = message.Buttons
+	msg.KeyboardStyle = communication.KeyboardStyle_Message
 	_, err := t.f.NewBotClient().SendMessage(ctx, &rms_bot_client.SendMessageRequest{Message: &msg})
 	return err
 }
