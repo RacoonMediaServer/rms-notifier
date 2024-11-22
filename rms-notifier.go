@@ -1,7 +1,6 @@
 package main
 
 import (
-	"context"
 	"fmt"
 
 	"github.com/RacoonMediaServer/rms-notifier/internal/config"
@@ -56,16 +55,6 @@ func main() {
 
 	if useDebug {
 		_ = logger.Init(logger.WithLevel(logger.DebugLevel))
-	}
-
-	senderFactory := sender.NewFactory(servicemgr.NewServiceFactory(service), config.Config())
-	nt := senderFactory.New(rms_notifier.Rule_Email, "mrenotenot@gmail.com")
-	err := nt.Send(context.Background(), &formatter.Message{
-		Subject:  "Test topic",
-		BodyHtml: "<h3>Hello!s</h3>",
-	})
-	if err != nil {
-		panic(err)
 	}
 
 	database, err := db.Connect(config.Config().Database)
