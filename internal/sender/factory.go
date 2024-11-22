@@ -12,9 +12,10 @@ type Factory interface {
 }
 
 type factory struct {
-	f      servicemgr.ServiceFactory
-	remote config.Remote
-	device string
+	f       servicemgr.ServiceFactory
+	remote  config.Remote
+	apiKey  string
+	backend config.EmailBackend
 }
 
 func (f factory) New(method rms_notifier.Rule_Method, destination string) Sender {
@@ -22,18 +23,22 @@ func (f factory) New(method rms_notifier.Rule_Method, destination string) Sender
 	case rms_notifier.Rule_Telegram:
 		return newTelegramSender(f.f)
 	case rms_notifier.Rule_Email:
-		return newEmailSender(f.remote, f.device, destination)
+		if f.backend == config.EmailBackend_TrueNAS {
+			return newTruenasEmailSender(f.remote, f.apiKey, destination)
+		}
+		return newRmsEmailSender(f.remote, f.apiKey, destination)
 	case rms_notifier.Rule_SMS:
-		return newSmsSender(f.remote, f.device, destination)
+		return newSmsSender(f.remote, f.apiKey, destination)
 	default:
 		panic("unknown notification method")
 	}
 }
 
-func NewFactory(f servicemgr.ServiceFactory, remote config.Remote, device string) Factory {
+func NewFactory(f servicemgr.ServiceFactory, conf config.Configuration) Factory {
 	return &factory{
-		f:      f,
-		remote: remote,
-		device: device,
+		f:       f,
+		remote:  conf.Remote,
+		apiKey:  conf.APIKey,
+		backend: conf.EmailBackend,
 	}
 }
