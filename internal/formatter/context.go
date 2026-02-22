@@ -12,4 +12,5 @@ type uiContext struct {
 	Code       string
 	Duration   string
 	Item       string
+	Seasons    string
 }

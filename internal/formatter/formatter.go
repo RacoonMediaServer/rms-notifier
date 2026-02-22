@@ -4,12 +4,13 @@ import (
 	"bytes"
 	"embed"
 	"fmt"
-	"github.com/RacoonMediaServer/rms-packages/pkg/communication"
-	"github.com/RacoonMediaServer/rms-packages/pkg/events"
-	"go-micro.dev/v4/logger"
 	"html/template"
 	plain "text/template"
 	"time"
+
+	"github.com/RacoonMediaServer/rms-packages/pkg/communication"
+	"github.com/RacoonMediaServer/rms-packages/pkg/events"
+	"go-micro.dev/v4/logger"
 )
 
 //go:embed templates
@@ -80,6 +81,12 @@ func (f Formatter) formatNotification(e *events.Notification) *Message {
 	case events.Notification_BackupComplete:
 		m.Severity = Info
 		m.Subject = "Резервное копирование завершено"
+	case events.Notification_ContentFound:
+		m.Severity = Info
+		m.Subject = "Найдены раздачи для добавленного контента"
+	case events.Notification_NewContentReleased:
+		m.Severity = Info
+		m.Subject = "Обнаружен новый сезон сериала"
 	case events.Notification_TorrentRemoved:
 		// системное уведомление, так что не отправляем
 		return nil
@@ -96,6 +103,9 @@ func (f Formatter) formatNotification(e *events.Notification) *Message {
 
 	if e.ItemTitle != nil {
 		ctx.Item = *e.ItemTitle
+	}
+	if e.Seasons != nil {
+		ctx.Seasons = fmt.Sprintf("%v", e.Seasons)
 	}
 
 	var buf bytes.Buffer
@@ -150,15 +160,15 @@ func (f Formatter) formatAlert(e *events.Alert) *Message {
 	m.Severity = Warning
 	m.Subject = ""
 	switch e.Kind {
-	case events.Alert_MotionDetected:
+	case events.AlertKind_MotionDetected:
 		m.Subject = "Замечено подозрительное движение"
-	case events.Alert_CrossLineDetected:
+	case events.AlertKind_CrossLineDetected:
 		m.Subject = "Пересечении линии периметра"
-	case events.Alert_IntrusionDetected:
+	case events.AlertKind_IntrusionDetected:
 		m.Subject = "Нарушение периметра"
-	case events.Alert_TamperDetected:
+	case events.AlertKind_TamperDetected:
 		m.Subject = "Вероятная попытка засветки камеры"
-	case events.Alert_GuestDetected:
+	case events.AlertKind_GuestDetected:
 		m.Severity = Info
 		m.Subject = "Гость на входе"
 	default:

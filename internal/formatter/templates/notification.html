@@ -32,6 +32,12 @@
         <td>{{$.Duration}}</td>
     </tr>
     {{ end }}
+    {{ if ne $.Seasons "" }}
+    <tr>
+        <td><b>Сезоны:</b></td>
+        <td>{{$.Seasons}}</td>
+    </tr>
+    {{ end }}
 </table>
 <br>
 </body>
